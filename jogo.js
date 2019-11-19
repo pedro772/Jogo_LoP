@@ -9,13 +9,25 @@ var tempo = 0;
 var pergunta;
 var resposta = "Elisa";
 var vidas = 3;
-var bombaDesativar; 
+var bombaDesativar;
+var estadoJogo;
+let button;
+
+// Estado do jogo
+
+const ESTADOJOGO {
+    PAUSADO : 0,
+    RODANDO : 1,
+    MENU : 2,
+    GAMEOVER : 3,
+    ENDGAME : 4
+};
 
 //definir um botão de desativamento futuramente
-//obs: declarar o soldaldo do mal 
-//funções 
+//funções
 
 function setup() {
+    estadoJogo = ESTADOJOGO.MENU;
     createCanvas(windowWidth, windowHeight);
     aviao = {x : 2, y : random(125, windowHeight)};
     posicao = {x : 0, y : 200};
@@ -28,8 +40,20 @@ function setup() {
 }
 
 function draw() {
-    background(255, 250, 250);
-  
+    // background(255, 250, 250); Cor neve
+    background(0);
+    if(estadoJogo === ESTADOJOGO.MENU) {
+        createCanvas(windowWidth, windowHeight);
+        background(0);
+        button = createButton("Iniciar Jogo");
+        button.position((windowWidth / 2), (windowHeight / 5));
+        button.mousePressed(rodando) 
+        }
+    function rodando() {
+        estadoJogo = ESTADOJOGO.RODANDO;
+    }
+
+    if(estadoJogo === ESTADOJOGO.RODANDO) {
     if (vidas <= 0) {
 	    fill(255); 
 	    text("GAME OVER!!!" , (windowWidth / 2), (windowHeight / 2))
@@ -47,13 +71,13 @@ function draw() {
         if (keyIsDown(LEFT_ARROW) && personagem.x > 25)
             personagem.x -= 5;
 
-        if (keyIsDown(RIGHT_ARROW) && personagem.x< width-25)
+        if (keyIsDown(RIGHT_ARROW) && personagem.x < width - 25)
             personagem.x += 5;
 
-        if (keyIsDown(UP_ARROW) && personagem.y> 125)
+        if (keyIsDown(UP_ARROW) && personagem.y > 125)
             personagem.y -= 5;
 
-        if (keyIsDown(DOWN_ARROW) && personagem.y < height-25)
+        if (keyIsDown(DOWN_ARROW) && personagem.y < height - 25)
             personagem.y += 5;
 	
         fill(152, 245, 255);
@@ -140,19 +164,19 @@ function draw() {
 
         textSize(14);  
         fill(255);
-        text("Vidas: " + vidas , 100, 15)
+        text("Vidas: " + vidas , 100, 15);
   
         //pontos
 
         textSize(14);
         fill(255);
-        text("Pontos: " + (bombaDesativar-1) , 10, 15);
+        text("Pontos: " + (bombaDesativar - 1) , 10, 15);
   
         //bomba1
   
         distancia1 = int(dist(bomba1.x, bomba1.y, personagem.x, personagem.y));
         textSize(20);
-        fill(255)
+        fill(255);
         text("A distancia entre você e a bomba 1 é " + distancia1 + " pixels.", 20, 40);
   
         if (distancia1 < 35 && bombaDesativar === 1) {
@@ -210,5 +234,6 @@ function draw() {
         else if (bombaDesativar < 3){
 	        text("BOOMM!!!", 400, 15);
         }
+  }
   }
 }
